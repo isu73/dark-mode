@@ -39,21 +39,34 @@
   <script>
     const darkStyleSheet = document.querySelector('link[rel="stylesheet"][title="dark"]');
     let darkSwitch = document.querySelector('input[type=checkbox]')
-    window.addEventListener("load", (event) => {
-      /** dark mode */
-      let darkMode = (localStorage.getItem('darkmode'));
-      console.log(darkMode);
-      darkSwitch.checked = darkMode; // switch
-      setDarkMode(darkMode);// darkmode display function
-    });
-    darkSwitch.addEventListener("click", function (e) {
-      // setCookie('darkmode', e.target.checked);
-      setDarkMode(e.target.checked);
-      localStorage.setItem("darkmode", e.target.checked);
+    darkStyleSheet.disabled = true;
+    let isEnabled = false;
+    toggleSwitch.addEventListener("click", function (e) {
+        if (e.target.checked) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            darkStyleSheet.disabled = false;
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            darkStyleSheet.disabled = true;
+        }
     })
-    function setDarkMode(m) {
-      darkStyleSheet.disabled = !m;
-    }
+
+    let currentTheme = localStorage.getItem('theme');
+    window.addEventListener('load', () => {
+        if (currentTheme === null) {
+            currentTheme = storedTheme // set currentTheme value 'dark' or 'light' if you have no stored value in a database
+            localStorage.setItem('theme', storedTheme);
+        }
+        if (currentTheme === 'dark') {
+            darkStyleSheet.disabled = false;
+            toggleSwitch.checked = true;
+        } else {
+            darkStyleSheet.disabled = true;
+            toggleSwitch.checked = false;
+        }
+    })
   </script>
   <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>
